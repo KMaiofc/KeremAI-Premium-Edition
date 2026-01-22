@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KeremAI v11 - Math & Secure</title>
+    <title>KeremAI v12 - Mobile Fix</title>
     
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -31,36 +28,37 @@
             display: flex; height: 100vh; height: 100dvh; overflow: hidden;
         }
 
-        /* --- MATEMATİK STİLİ --- */
         .katex-display { overflow-x: auto; overflow-y: hidden; padding: 10px 0; }
         .katex { font-size: 1.1em; }
 
-        /* --- GÜVENLİK EKRANI (Düzeltildi) --- */
+        /* --- GÜVENLİK EKRANI (MOBİL FİX) --- */
         #loginOverlay {
-            position: fixed; inset: 0; background: #000000; z-index: 9999;
+            position: fixed; inset: 0; background: #000000; z-index: 99999;
             display: flex; align-items: center; justify-content: center; flex-direction: column;
-            transition: opacity 0.5s ease; /* Yumuşak geçiş */
         }
         .login-box {
-            background: #18181b; padding: 40px; border-radius: 24px; border: 1px solid #27272a;
-            text-align: center; width: 90%; max-width: 400px;
+            background: #18181b; padding: 30px; border-radius: 24px; border: 1px solid #27272a;
+            text-align: center; width: 85%; max-width: 400px;
             box-shadow: 0 0 50px rgba(59, 130, 246, 0.1);
         }
         .login-title {
             font-size: 24px; font-weight: 800; background: var(--grad);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;
         }
+        /* Mobil klavye uyumlu input */
         .login-input {
             width: 100%; padding: 14px; background: #09090b; border: 1px solid #27272a;
-            color: white; border-radius: 12px; margin-bottom: 20px; font-size: 16px; text-align: center; letter-spacing: 1px;
+            color: white; border-radius: 12px; margin-bottom: 20px; font-size: 16px; 
+            text-align: center; letter-spacing: 1px; -webkit-appearance: none;
         }
         .login-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
         .login-btn {
             width: 100%; padding: 14px; background: var(--grad); color: white; border: none;
             border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s;
+            -webkit-appearance: none; /* iOS fix */
         }
-        .login-btn:hover { opacity: 0.9; transform: scale(1.02); }
-        .error-msg { color: #ef4444; font-size: 13px; margin-top: 15px; display: none; }
+        .login-btn:active { transform: scale(0.98); opacity: 0.8; }
+        .error-msg { color: #ef4444; font-size: 14px; margin-top: 15px; display: none; font-weight: bold; }
 
         /* --- Sidebar --- */
         .sidebar { 
@@ -76,22 +74,18 @@
         .close-sidebar { display: none; background: none; border: none; color: #71717a; font-size: 20px; }
         .new-chat { 
             background: #27272a; color: #a1a1aa; padding: 12px; border-radius: 12px; cursor: pointer; 
-            display: flex; align-items: center; gap: 10px; font-size: 14px; border: 1px solid #3f3f46; margin-bottom: 12px; transition: 0.2s; 
+            display: flex; align-items: center; gap: 10px; font-size: 14px; border: 1px solid #3f3f46; margin-bottom: 12px; 
         }
-        .new-chat:hover { background: #3f3f46; color: white; border-color: #52525b; }
         .history { flex-grow: 1; overflow-y: auto; margin-top: 10px; padding-right: 5px; }
         .h-item { 
             padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #a1a1aa; 
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; 
-            border: 1px solid transparent; transition: 0.1s;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; border: 1px solid transparent; 
         }
-        .h-item:hover { background: #27272a; color: white; }
         .h-item.active { background: #1e1e24; color: white; border-color: #3f3f46; border-left: 3px solid var(--accent); }
         .h-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
         .h-actions { display: flex; gap: 5px; opacity: 0; }
         .h-item:hover .h-actions { opacity: 1; }
         .action-btn { background: none; border: none; color: #71717a; font-size: 12px; padding: 4px; cursor: pointer; }
-        .action-btn:hover { color: white; }
         .settings-btn { 
             margin-top: auto; padding: 12px; background: #18181b; border-radius: 10px; 
             cursor: pointer; text-align: center; border: 1px solid #27272a; 
@@ -106,10 +100,9 @@
         }
         .menu-btn { display: none; background: none; border: none; color: white; font-size: 20px; }
         .modes { display: flex; gap: 4px; background: #18181b; padding: 4px; border-radius: 10px; border: 1px solid #27272a; }
-        .mode-opt { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; color: #71717a; font-weight: 500; transition: 0.2s;}
+        .mode-opt { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; color: #71717a; font-weight: 500; }
         .mode-opt.active { background: #27272a; color: white; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
 
-        /* Sohbet */
         .chat-area { flex-grow: 1; padding: 24px 15%; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth; }
         .msg { display: flex; gap: 16px; font-size: 15px; line-height: 1.6; max-width: 100%; }
         .msg.user { flex-direction: row-reverse; }
@@ -124,30 +117,25 @@
         .copy-btn { 
             position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.05); color: #a1a1aa; 
             border: 1px solid #3f3f46; border-radius: 6px; padding: 6px 10px; font-size: 11px; 
-            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
+            cursor: pointer; display: flex; align-items: center; gap: 6px;
         }
-        .copy-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .typing-cursor::after { content: '▋'; display: inline-block; animation: blink 1s infinite; color: var(--accent); margin-left: 2px; font-size: 0.8em;}
+        .typing-cursor::after { content: '▋'; display: inline-block; animation: blink 1s infinite; color: var(--accent); margin-left: 2px; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* Input */
         .input-area { padding: 16px 15%; background: var(--bg); display: flex; flex-direction: column; gap: 12px; border-top: 1px solid #27272a; }
         .img-preview { display: none; padding: 8px; background: #18181b; border-radius: 8px; width: fit-content; position: relative; border: 1px solid #27272a; }
         .img-preview img { height: 60px; border-radius: 4px; }
         .close-img { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; }
-        .input-box { background: var(--input-bg); border-radius: 24px; padding: 12px 20px; display: flex; align-items: center; gap: 12px; border: 1px solid #27272a; transition: border 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .input-box:focus-within { border-color: #52525b; background: #27272a; }
+        .input-box { background: var(--input-bg); border-radius: 24px; padding: 12px 20px; display: flex; align-items: center; gap: 12px; border: 1px solid #27272a; }
         input[type="text"] { flex-grow: 1; background: none; border: none; color: white; font-size: 16px; padding: 0; }
-        .icon-btn { background: none; border: none; color: #71717a; font-size: 20px; cursor: pointer; padding: 4px; transition: 0.2s; }
-        .icon-btn:hover { color: var(--accent); }
+        .icon-btn { background: none; border: none; color: #71717a; font-size: 20px; cursor: pointer; padding: 4px; }
 
-        /* Modal */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal { background: #18181b; padding: 32px; border-radius: 20px; width: 90%; max-width: 480px; border: 1px solid #27272a; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         .form-label { display: block; color: #a1a1aa; font-size: 13px; margin-bottom: 8px; }
         .form-control { width: 100%; padding: 12px; background: #09090b; border: 1px solid #27272a; color: white; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
-        .btn { width: 100%; padding: 14px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; transition: 0.2s; }
-        .btn-save { background: var(--grad); color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25); }
+        .btn { width: 100%; padding: 14px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; }
+        .btn-save { background: var(--grad); color: white; }
 
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -100%; top: 0; height: 100%; width: 85%; }
@@ -164,9 +152,10 @@
 <div id="loginOverlay">
     <div class="login-box">
         <div class="login-title">KeremAI Secure</div>
-        <input type="password" id="sysPass" class="login-input" placeholder="ŞİFREYİ GİRİNİZ">
+        <input type="password" id="sysPass" class="login-input" placeholder="ŞİFREYİ GİRİNİZ" 
+               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <button class="login-btn" onclick="checkLogin()">SİSTEMİ AÇ</button>
-        <div id="loginError" class="error-msg">⛔ Erişim Reddedildi: Yanlış Şifre</div>
+        <div id="loginError" class="error-msg">⛔ Yanlış Şifre</div>
     </div>
 </div>
 
@@ -174,7 +163,7 @@
 
 <div class="sidebar" id="sidebar">
     <div class="brand">
-        KeremAI <span style="font-size:11px; padding:4px 8px; background:#27272a; border-radius:6px; color:#a1a1aa;">v11</span>
+        KeremAI <span style="font-size:11px; padding:4px 8px; background:#27272a; border-radius:6px; color:#a1a1aa;">v12</span>
         <button class="close-sidebar" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="new-chat" onclick="ChatManager.newChat(); toggleSidebar()">
@@ -184,8 +173,8 @@
     <div class="settings-btn" onclick="UIManager.openModal()">
         <i class="fa-solid fa-sliders"></i> API Ayarları
     </div>
-        </div>
-    <div class="main">
+</div>
+<div class="main">
     <div class="header">
         <button class="menu-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
         <div class="modes">
@@ -199,7 +188,7 @@
     <div class="chat-area" id="chatArea">
         <div style="text-align: center; margin-top: 30vh; opacity: 0.6; transform: translateY(-20px);">
             <h1 style="background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size:42px; margin:0 0 10px 0;">KeremAI</h1>
-            <p style="color:#a1a1aa;">Matematik Dehası & Tam Güvenlik</p>
+            <p style="color:#a1a1aa;">Güvenli Sistem Aktif</p>
         </div>
     </div>
 
@@ -248,18 +237,25 @@
 </div>
 
 <script>
-    // --- GÜVENLİK SİSTEMİ (BUG FİX) ---
+    // --- GÜVENLİK SİSTEMİ (KESİN ÇÖZÜM) ---
     const SECURITY = {
         pass: "EemkmsssöLşpsMNA12",
         check: () => {
             const inp = document.getElementById('sysPass');
+            const overlay = document.getElementById('loginOverlay');
             const err = document.getElementById('loginError');
-            // .trim() fonksiyonu baştaki ve sondaki görünmez boşlukları siler (Mobil klavye hatasını çözer)
+            
+            // .trim() ile boşlukları sil
             if(inp.value.trim() === SECURITY.pass) {
-                document.getElementById('loginOverlay').style.display = 'none';
-                ChatManager.init(); // Sistemi başlat
+                // 1. Klavyeyi kapat
+                inp.blur();
+                // 2. Overlay'i SİL (Gizlemek yetmez, silersek kesin gider)
+                overlay.remove();
+                // 3. Sistemi başlat
+                ChatManager.init();
             } else {
                 err.style.display = 'block';
+                // Yanlışsa temizle
                 inp.value = '';
                 inp.focus();
             }
@@ -280,9 +276,9 @@
     };
 
     const Prompts = {
-        hizli: "Sen KeremAI'sın. Türkçe konuş. En kısa, net ve doğrudan cevabı ver.",
-        pro: "Sen KeremAI'sın. Üst düzey bir yapay zeka asistanısın. Markdown formatında detaylı ve profesyonel cevaplar ver.",
-        dusunen: "Sen KeremAI'sın. Mantık yürüt. Eğer matematik sorusu varsa LaTeX formatında (örn: $$...$$) cevap ver."
+        hizli: "Sen KeremAI'sın. Türkçe konuş. Kısa ve net cevap ver.",
+        pro: "Sen KeremAI'sın. Profesyonel ve detaylı bir asistansın.",
+        dusunen: "Sen KeremAI'sın. Matematik ve Mantık uzmanısın. Matematik sorularını mutlaka LaTeX formatında (örn: $$\\frac{a}{b}$$) yaz. Adım adım düşün."
     };
 
     const ImageManager = {
@@ -428,7 +424,6 @@
             if(role === 'user') { let h = txt; if(img) h += `<br><img src="${img}">`; b.innerHTML = h; } 
             else { 
                 b.innerHTML = marked.parse(txt); 
-                // Matematik Render (KaTeX) - Yükleme anında
                 renderMathInElement(b, {delimiters: [{left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false}]});
                 UIManager.addCopyButtons(b); 
             }
@@ -450,7 +445,6 @@
                     if (i >= txt.length) { 
                         clearInterval(interval); el.classList.remove('typing-cursor');
                         el.innerHTML = marked.parse(txt); 
-                        // Matematik Render (KaTeX) - Yazma bitince
                         renderMathInElement(el, {delimiters: [{left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false}]});
                         UIManager.addCopyButtons(el); 
                         resolve(); 
@@ -468,8 +462,7 @@
             });
         }
     };
-    
-    // Auto-init yok, şifreden sonra başlayacak.
 </script>
 </body>
 </html>
+    
