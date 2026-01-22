@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KeremAI v9 - AutoSave</title>
+    <title>KeremAI v10 - Secure</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -24,26 +24,49 @@
             display: flex; height: 100vh; height: 100dvh; overflow: hidden;
         }
 
+        /* --- GÜVENLİK EKRANI (LOGIN) --- */
+        #loginOverlay {
+            position: fixed; inset: 0; background: #000000; z-index: 9999;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .login-box {
+            background: #18181b; padding: 40px; border-radius: 24px; border: 1px solid #27272a;
+            text-align: center; width: 90%; max-width: 400px;
+            box-shadow: 0 0 50px rgba(59, 130, 246, 0.1);
+        }
+        .login-title {
+            font-size: 24px; font-weight: 800; background: var(--grad);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;
+        }
+        .login-input {
+            width: 100%; padding: 14px; background: #09090b; border: 1px solid #27272a;
+            color: white; border-radius: 12px; margin-bottom: 20px; font-size: 16px; text-align: center; letter-spacing: 2px;
+        }
+        .login-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+        .login-btn {
+            width: 100%; padding: 14px; background: var(--grad); color: white; border: none;
+            border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s;
+        }
+        .login-btn:hover { opacity: 0.9; transform: scale(1.02); }
+        .error-msg { color: #ef4444; font-size: 13px; margin-top: 15px; display: none; }
+
         /* --- Sidebar --- */
         .sidebar { 
             width: 280px; background: var(--sidebar); display: flex; flex-direction: column; 
             padding: 16px; border-right: 1px solid #27272a; z-index: 100;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
         .brand { 
             font-size: 20px; font-weight: 800; background: var(--grad); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
             margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; 
         }
         .close-sidebar { display: none; background: none; border: none; color: #71717a; font-size: 20px; }
-        
         .new-chat { 
             background: #27272a; color: #a1a1aa; padding: 12px; border-radius: 12px; cursor: pointer; 
             display: flex; align-items: center; gap: 10px; font-size: 14px; border: 1px solid #3f3f46; margin-bottom: 12px; transition: 0.2s; 
         }
         .new-chat:hover { background: #3f3f46; color: white; border-color: #52525b; }
-
         .history { flex-grow: 1; overflow-y: auto; margin-top: 10px; padding-right: 5px; }
         .h-item { 
             padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #a1a1aa; 
@@ -57,59 +80,41 @@
         .h-item:hover .h-actions { opacity: 1; }
         .action-btn { background: none; border: none; color: #71717a; font-size: 12px; padding: 4px; cursor: pointer; }
         .action-btn:hover { color: white; }
-
         .settings-btn { 
             margin-top: auto; padding: 12px; background: #18181b; border-radius: 10px; 
             cursor: pointer; text-align: center; border: 1px solid #27272a; 
             font-size: 13px; color: #a1a1aa; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .settings-btn:hover { background: #27272a; color: white; }
 
         /* --- Ana Alan --- */
         .main { flex-grow: 1; display: flex; flex-direction: column; position: relative; width: 100%; }
-        
         .header { 
             padding: 0 16px; border-bottom: 1px solid #27272a; display: flex; 
             align-items: center; gap: 12px; background: var(--bg); height: 64px;
         }
         .menu-btn { display: none; background: none; border: none; color: white; font-size: 20px; }
-        
         .modes { display: flex; gap: 4px; background: #18181b; padding: 4px; border-radius: 10px; border: 1px solid #27272a; }
         .mode-opt { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; color: #71717a; font-weight: 500; transition: 0.2s;}
         .mode-opt.active { background: #27272a; color: white; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
 
         /* Sohbet */
-        .chat-area { 
-            flex-grow: 1; padding: 24px 15%; overflow-y: auto; 
-            display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth; 
-        }
-        
+        .chat-area { flex-grow: 1; padding: 24px 15%; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth; }
         .msg { display: flex; gap: 16px; font-size: 15px; line-height: 1.6; max-width: 100%; }
         .msg.user { flex-direction: row-reverse; }
         .avatar { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
         .avatar.ai { background: var(--grad); color: white; }
         .avatar.user { background: #27272a; color: #e4e4e7; border: 1px solid #3f3f46; }
-        
         .bubble { max-width: 100%; position: relative; word-wrap: break-word; }
         .msg.user .bubble { background: #27272a; color: white; padding: 12px 18px; border-radius: 16px; border-bottom-right-radius: 2px; }
         .msg.ai .bubble { padding-left: 0; width: 100%; }
-        
         .bubble img { max-width: 100%; border-radius: 8px; margin-top: 8px; border: 1px solid #3f3f46; }
-
-        /* Kod Blokları */
-        .bubble pre { 
-            background: var(--code-bg); padding: 16px; border-radius: 8px; overflow-x: auto; 
-            margin: 16px 0; border: 1px solid #27272a; position: relative; font-family: 'Consolas', monospace;
-        }
+        .bubble pre { background: var(--code-bg); padding: 16px; border-radius: 8px; overflow-x: auto; margin: 16px 0; border: 1px solid #27272a; position: relative; font-family: 'Consolas', monospace; }
         .copy-btn { 
-            position: absolute; top: 12px; right: 12px; 
-            background: rgba(255,255,255,0.05); color: #a1a1aa; 
-            border: 1px solid #3f3f46; border-radius: 6px; padding: 6px 10px; 
-            font-size: 11px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
+            position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.05); color: #a1a1aa; 
+            border: 1px solid #3f3f46; border-radius: 6px; padding: 6px 10px; font-size: 11px; 
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
         }
         .copy-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-
-        /* Yazma Efekti */
         .typing-cursor::after { content: '▋'; display: inline-block; animation: blink 1s infinite; color: var(--accent); margin-left: 2px; font-size: 0.8em;}
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
@@ -118,7 +123,6 @@
         .img-preview { display: none; padding: 8px; background: #18181b; border-radius: 8px; width: fit-content; position: relative; border: 1px solid #27272a; }
         .img-preview img { height: 60px; border-radius: 4px; }
         .close-img { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; }
-
         .input-box { background: var(--input-bg); border-radius: 24px; padding: 12px 20px; display: flex; align-items: center; gap: 12px; border: 1px solid #27272a; transition: border 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
         .input-box:focus-within { border-color: #52525b; background: #27272a; }
         input[type="text"] { flex-grow: 1; background: none; border: none; color: white; font-size: 16px; padding: 0; }
@@ -130,10 +134,8 @@
         .modal { background: #18181b; padding: 32px; border-radius: 20px; width: 90%; max-width: 480px; border: 1px solid #27272a; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         .form-label { display: block; color: #a1a1aa; font-size: 13px; margin-bottom: 8px; }
         .form-control { width: 100%; padding: 12px; background: #09090b; border: 1px solid #27272a; color: white; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
-        .form-control:focus { border-color: var(--accent); }
         .btn { width: 100%; padding: 14px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; transition: 0.2s; }
         .btn-save { background: var(--grad); color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25); }
-        .btn-save:hover { opacity: 0.9; }
 
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -100%; top: 0; height: 100%; width: 85%; }
@@ -147,11 +149,20 @@
 </head>
 <body>
 
+<div id="loginOverlay">
+    <div class="login-box">
+        <div class="login-title">KeremAI Secure</div>
+        <input type="password" id="sysPass" class="login-input" placeholder="ŞİFREYİ GİRİNİZ">
+        <button class="login-btn" onclick="checkLogin()">SİSTEMİ AÇ</button>
+        <div id="loginError" class="error-msg">⛔ Erişim Reddedildi: Yanlış Şifre</div>
+    </div>
+</div>
+
 <div class="overlay" onclick="toggleSidebar()"></div>
 
 <div class="sidebar" id="sidebar">
     <div class="brand">
-        KeremAI <span style="font-size:11px; padding:4px 8px; background:#27272a; border-radius:6px; color:#a1a1aa;">v9</span>
+        KeremAI <span style="font-size:11px; padding:4px 8px; background:#27272a; border-radius:6px; color:#a1a1aa;">v10</span>
         <button class="close-sidebar" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="new-chat" onclick="ChatManager.newChat(); toggleSidebar()">
@@ -176,7 +187,7 @@
     <div class="chat-area" id="chatArea">
         <div style="text-align: center; margin-top: 30vh; opacity: 0.6; transform: translateY(-20px);">
             <h1 style="background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size:42px; margin:0 0 10px 0;">KeremAI</h1>
-            <p style="color:#a1a1aa;">Otomatik Hafıza & Üstün Zeka</p>
+            <p style="color:#a1a1aa;">Güvenli Sistem Aktif</p>
         </div>
     </div>
 
@@ -190,7 +201,7 @@
                 <input type="file" hidden accept="image/*" onchange="ImageManager.handleSelect(this)">
                 <i class="fa-regular fa-image"></i>
             </label>
-            <input type="text" id="userInput" placeholder="Bir şeyler yaz..." autocomplete="off">
+            <input type="text" id="userInput" placeholder="Mesaj yaz..." autocomplete="off">
             <button class="icon-btn" id="sendBtn" style="color:var(--accent);" onclick="ChatManager.sendMessage()">
                 <i class="fa-solid fa-paper-plane"></i>
             </button>
@@ -201,57 +212,64 @@
 <div class="modal-overlay" id="settingsModal">
     <div class="modal">
         <h2 style="margin-top:0; font-size:20px;">⚙️ API Bağlantısı</h2>
-        
         <label class="form-label">Sağlayıcı</label>
         <select id="providerSel" class="form-control" onchange="APIManager.uiCheck()">
             <option value="google">Google Gemini</option>
             <option value="openai">OpenAI (GPT)</option>
             <option value="openrouter">OpenRouter (Hepsi)</option>
         </select>
-
         <label class="form-label">API Anahtarı</label>
         <div style="display:flex; gap:10px; margin-bottom:20px;">
             <input type="password" id="apiKeyInp" class="form-control" style="margin-bottom:0;" placeholder="sk-..." oninput="APIManager.detectProvider()">
             <button class="btn btn-save" style="width:auto; padding:0 20px; background:#27272a; border:1px solid #3f3f46;" id="scanBtn" onclick="APIManager.scanModels()">🔍</button>
         </div>
         <div id="scanMsg" style="font-size:12px; margin-top:-10px; margin-bottom:15px; min-height:18px;"></div>
-
         <label class="form-label">Model Seçimi</label>
         <select id="modelSel" class="form-control"><option value="" disabled selected>Önce tarama yapın...</option></select>
-
         <div id="baseUrlGroup" style="display:none;">
             <label class="form-label">Base URL</label>
             <input type="text" id="baseUrlInp" class="form-control" placeholder="https://openrouter.ai/api/v1">
         </div>
-
-        <button class="btn btn-save" onclick="APIManager.saveConfig()">Ayarları Kaydet</button>
+        <button class="btn btn-save" onclick="APIManager.saveConfig()">Kaydet</button>
         <button class="btn" style="background:transparent; color:#a1a1aa; margin-top:0;" onclick="UIManager.closeModal()">Vazgeç</button>
     </div>
 </div>
 
 <script>
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('active');
-        document.querySelector('.overlay').classList.toggle('active');
-    }
+    // --- GÜVENLİK SİSTEMİ ---
+    const SECURITY = {
+        pass: "EemkmsssöLşpsMNA12",
+        check: () => {
+            const inp = document.getElementById('sysPass');
+            const err = document.getElementById('loginError');
+            if(inp.value === SECURITY.pass) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                ChatManager.init(); // Sistemi başlat
+            } else {
+                err.style.display = 'block';
+                inp.value = '';
+                inp.focus();
+            }
+        }
+    };
+    function checkLogin() { SECURITY.check(); }
+    document.getElementById('sysPass').addEventListener("keypress", (e)=>{if(e.key==="Enter") checkLogin();});
 
-    // --- YAPILANDIRMA VE PERSISTENCE ---
+    // --- SİSTEM KODLARI ---
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.querySelector('.overlay').classList.toggle('active'); }
+
     const State = {
-        chats: JSON.parse(localStorage.getItem('keremai_v9_chats')) || [],
+        chats: JSON.parse(localStorage.getItem('keremai_v10_chats')) || [],
         activeChatId: null,
-        // Model listesini de kaydediyoruz ki refresh atınca silinmesin
-        savedModels: JSON.parse(localStorage.getItem('keremai_v9_models')) || [], 
-        config: JSON.parse(localStorage.getItem('keremai_v9_config')) || { provider: 'google', key: '', model: '', baseUrl: '' },
-        currentMode: 'hizli',
-        currentImg: null,
-        isTyping: false
+        savedModels: JSON.parse(localStorage.getItem('keremai_v10_models')) || [], 
+        config: JSON.parse(localStorage.getItem('keremai_v10_config')) || { provider: 'google', key: '', model: '', baseUrl: '' },
+        currentMode: 'hizli', currentImg: null, isTyping: false
     };
 
-    // --- SÜPER ZEKA TALİMATLARI ---
     const Prompts = {
-        hizli: "Sen KeremAI'sın. Türkçe konuşuyorsun. Görevin kullanıcıya en kısa sürede, en net ve doğrudan cevabı vermek. Gereksiz nezaket cümlelerini at, direkt sadede gel.",
-        pro: "Sen KeremAI'sın. Üst düzey bir yapay zeka asistanısın. Cevapların akademik kalitede, iyi yapılandırılmış ve Markdown formatında (kalın başlıklar, listeler, kod blokları) olmalı. Kullanıcı eksik bilgi verirse mantıklı varsayımlarda bulun.",
-        dusunen: "Sen KeremAI'sın. [DERİN ANALİZ MODU] Etkinleştirildi. Bir cevabı vermeden önce: 1. Soruyu parçalara ayır. 2. Mantıksal tutarlılığı kontrol et. 3. Olası hataları öngör. Kod yazıyorsan en güvenli ve modern yöntemi seç. Adım adım düşün ama çıktı olarak sadece mükemmel sonucu ver."
+        hizli: "Sen KeremAI'sın. Türkçe konuş. En kısa, net ve doğrudan cevabı ver.",
+        pro: "Sen KeremAI'sın. Üst düzey bir yapay zeka asistanısın. Markdown formatında (kalın, liste, kod bloğu) detaylı ve profesyonel cevaplar ver.",
+        dusunen: "Sen KeremAI'sın. [DERİN ANALİZ] modundasın. Soruyu adım adım düşün. Mantıksal analiz yap. Kod yazıyorsan en güvenli ve modern yöntemi seç. Sadece sonucu mükemmel şekilde ver."
     };
 
     const ImageManager = {
@@ -281,48 +299,34 @@
             const base = document.getElementById('baseUrlInp').value || 'https://openrouter.ai/api/v1';
 
             if(!k) return m.innerText = "❌ Lütfen anahtar girin";
-            m.innerText = "Sunucuya bağlanıyor..."; btn.disabled=true; btn.innerText="...";
+            m.innerText = "Bağlanıyor..."; btn.disabled=true;
 
             try {
                 let list = [];
                 if(p === 'google') {
                     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${k}`);
-                    const d = await r.json();
-                    if(d.error) throw new Error(d.error.message);
+                    const d = await r.json(); if(d.error) throw new Error(d.error.message);
                     list = d.models.filter(x=>x.supportedGenerationMethods.includes("generateContent")).map(x=>({id:x.name.replace('models/',''), name:x.displayName||x.name}));
                 } else {
                     const u = p === 'openai' ? 'https://api.openai.com/v1/models' : `${base}/models`;
                     const r = await fetch(u, { headers: { 'Authorization': `Bearer ${k}` } });
-                    const d = await r.json();
-                    if(d.error) throw new Error(d.error.message);
-                    const data = d.data || d;
-                    list = data.map(x=>({id:x.id, name:x.name||x.id})).sort((a,b)=>a.id.localeCompare(b.id));
+                    const d = await r.json(); if(d.error) throw new Error(d.error.message);
+                    const data = d.data || d; list = data.map(x=>({id:x.id, name:x.name||x.id})).sort((a,b)=>a.id.localeCompare(b.id));
                 }
-                
-                // Modelleri kaydet
-                State.savedModels = list;
-                localStorage.setItem('keremai_v9_models', JSON.stringify(list));
-                
+                State.savedModels = list; localStorage.setItem('keremai_v10_models', JSON.stringify(list));
                 APIManager.populateModelSelect(list);
                 m.innerText = `✅ ${list.length} model bulundu`; m.style.color="#4ade80";
-            } catch(e) { m.innerText = "Hata: " + e.message; m.style.color="#ef4444"; } finally { btn.disabled=false; btn.innerText="🔍"; }
+            } catch(e) { m.innerText = "Hata: " + e.message; m.style.color="#ef4444"; } finally { btn.disabled=false; }
         },
         populateModelSelect: (list) => {
             const sel = document.getElementById('modelSel'); sel.innerHTML = '';
             list.forEach(x=>{ const o=document.createElement('option'); o.value=x.id; o.innerText=x.name; sel.appendChild(o); });
-            // Eğer config'deki model listede varsa onu seç
             if(State.config.model) sel.value = State.config.model;
         },
         saveConfig: () => {
-            State.config = { 
-                provider: document.getElementById('providerSel').value, 
-                key: document.getElementById('apiKeyInp').value, 
-                model: document.getElementById('modelSel').value, 
-                baseUrl: document.getElementById('baseUrlInp').value 
-            };
-            localStorage.setItem('keremai_v9_config', JSON.stringify(State.config));
-            UIManager.closeModal(); 
-            ChatManager.init(); // UI güncelle
+            State.config = { provider: document.getElementById('providerSel').value, key: document.getElementById('apiKeyInp').value, model: document.getElementById('modelSel').value, baseUrl: document.getElementById('baseUrlInp').value };
+            localStorage.setItem('keremai_v10_config', JSON.stringify(State.config));
+            UIManager.closeModal(); ChatManager.init();
         },
         generate: async (hist, txt, img) => {
             const {provider, key, model, baseUrl} = State.config;
@@ -334,9 +338,7 @@
                 if(conts.length===0) curr[0].text = sys + "\n\n" + txt; else conts[0].parts[0].text = sys + "\n\n" + conts[0].parts[0].text;
                 conts.push({ role:'user', parts:curr });
                 const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({contents:conts}) });
-                const d = await r.json(); 
-                if(d.error) throw new Error(d.error.message);
-                return d.candidates[0].content.parts[0].text;
+                const d = await r.json(); if(d.error) throw new Error(d.error.message); return d.candidates[0].content.parts[0].text;
             } else {
                 const u = provider==='openai'?'https://api.openai.com/v1/chat/completions':`${baseUrl}/chat/completions`;
                 let msgs = [{role:"system", content:sys}];
@@ -346,9 +348,7 @@
                 const h = {'Authorization':`Bearer ${key}`, 'Content-Type':'application/json'};
                 if(provider==='openrouter'){ h['HTTP-Referer']=window.location.href; h['X-Title']='KeremAI'; }
                 const r = await fetch(u, { method:'POST', headers:h, body:JSON.stringify({model, messages:msgs}) });
-                const d = await r.json(); 
-                if(d.error) throw new Error(d.error.message);
-                return d.choices[0].message.content;
+                const d = await r.json(); if(d.error) throw new Error(d.error.message); return d.choices[0].message.content;
             }
         }
     };
@@ -357,27 +357,13 @@
         init: () => {
             UIManager.renderSidebar();
             if(State.chats.length>0) ChatManager.loadChat(State.chats[0].id); else ChatManager.newChat();
-            
-            // --- OTOMATİK DOLDURMA (AUTO-FILL) ---
             if(State.config.key) {
                 document.getElementById('apiKeyInp').value = State.config.key;
                 document.getElementById('providerSel').value = State.config.provider;
                 document.getElementById('baseUrlInp').value = State.config.baseUrl;
-                
-                // Kayıtlı model listesini geri yükle
-                if(State.savedModels.length > 0) {
-                    APIManager.populateModelSelect(State.savedModels);
-                } else if (State.config.model) {
-                    // Liste yoksa ama model seçiliyse geçici olarak ekle
-                    const opt = document.createElement('option');
-                    opt.value = State.config.model; opt.innerText = State.config.model;
-                    document.getElementById('modelSel').appendChild(opt);
-                    document.getElementById('modelSel').value = State.config.model;
-                }
-                
-                if(State.config.model) {
-                     document.getElementById('activeModelDisplay').innerText = `Model: ${State.config.model}`;
-                }
+                if(State.savedModels.length > 0) APIManager.populateModelSelect(State.savedModels);
+                else if (State.config.model) { const o=document.createElement('option'); o.value=State.config.model; o.innerText=State.config.model; document.getElementById('modelSel').appendChild(o); document.getElementById('modelSel').value=State.config.model; }
+                if(State.config.model) document.getElementById('activeModelDisplay').innerText = `Model: ${State.config.model}`;
                 APIManager.uiCheck();
             }
         },
@@ -395,26 +381,18 @@
             const chat = State.chats.find(c=>c.id===State.activeChatId);
             UIManager.appendMsg('user', txt, img?img.full:null);
             document.getElementById('userInput').value = ''; ImageManager.clear();
-
             chat.messages.push({role:'user', content:txt + (img?" [Görsel]":"")});
             if(chat.messages.length===1 && txt) { chat.title = txt.substring(0,25); UIManager.renderSidebar(); }
 
-            State.isTyping = true;
-            document.getElementById('sendBtn').style.opacity = "0.5";
+            State.isTyping = true; document.getElementById('sendBtn').style.opacity = "0.5";
             const aiMsgBubble = UIManager.createAiBubble();
-
             try {
                 const res = await APIManager.generate(chat.messages.slice(0,-1), txt, img);
                 await UIManager.typeWriter(aiMsgBubble, res);
                 chat.messages.push({role:'ai', content:res}); ChatManager.save();
-            } catch(e) {
-                aiMsgBubble.innerHTML = "⚠️ Hata: " + e.message;
-            } finally {
-                State.isTyping = false;
-                document.getElementById('sendBtn').style.opacity = "1";
-            }
+            } catch(e) { aiMsgBubble.innerHTML = "⚠️ Hata: " + e.message; } finally { State.isTyping = false; document.getElementById('sendBtn').style.opacity = "1"; }
         },
-        save: () => localStorage.setItem('keremai_v9_chats', JSON.stringify(State.chats)),
+        save: () => localStorage.setItem('keremai_v10_chats', JSON.stringify(State.chats)),
         setMode: (m, el) => { State.currentMode = m; document.querySelectorAll('.mode-opt').forEach(d=>d.classList.remove('active')); el.classList.add('active'); }
     };
 
@@ -454,12 +432,8 @@
             return new Promise((resolve) => {
                 let i = 0; const speed = 10;
                 const interval = setInterval(() => {
-                    el.textContent += txt.charAt(i); i++;
-                    const a = document.getElementById('chatArea'); a.scrollTop = a.scrollHeight;
-                    if (i >= txt.length) {
-                        clearInterval(interval); el.classList.remove('typing-cursor');
-                        el.innerHTML = marked.parse(txt); UIManager.addCopyButtons(el); resolve();
-                    }
+                    el.textContent += txt.charAt(i); i++; const a = document.getElementById('chatArea'); a.scrollTop = a.scrollHeight;
+                    if (i >= txt.length) { clearInterval(interval); el.classList.remove('typing-cursor'); el.innerHTML = marked.parse(txt); UIManager.addCopyButtons(el); resolve(); }
                 }, speed);
             });
         },
@@ -467,16 +441,15 @@
             el.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
             el.querySelectorAll('pre').forEach(pre => {
                 if(pre.querySelector('.copy-btn')) return;
-                const btn = document.createElement('button'); btn.className = 'copy-btn'; 
-                btn.innerHTML = '<i class="fa-regular fa-copy"></i> Kopyala';
+                const btn = document.createElement('button'); btn.className = 'copy-btn'; btn.innerHTML = '<i class="fa-regular fa-copy"></i> Kopyala';
                 btn.onclick = () => { navigator.clipboard.writeText(pre.querySelector('code').innerText); btn.innerHTML = '<i class="fa-solid fa-check"></i>'; setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i> Kopyala', 2000); };
                 pre.appendChild(btn);
             });
         }
     };
-
-    window.onload = ChatManager.init;
-    document.getElementById('userInput').addEventListener("keypress", (e)=>{if(e.key==="Enter") ChatManager.sendMessage();});
+    
+    // Güvenlik olduğu için window.onload'da ChatManager'ı direkt başlatmıyoruz.
+    // Şifre girilince başlatıyoruz.
 </script>
 </body>
 </html>
